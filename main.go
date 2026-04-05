@@ -1,18 +1,14 @@
 package main
 
 import (
+	"choseclothes/internal/shared/router"
 	"choseclothes/internal/user"
-
-	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	r := gin.Default()
+	userHandler := &user.UserHandler{}
 
-	userHandler := user.UserHandler{}
-
-	r.GET("/users", userHandler.GetUsers)
-	r.POST("/users", userHandler.CreateUser)
+	r := router.SetupRouter(userHandler)
 
 	r.Run()
 }
