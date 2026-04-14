@@ -1,4 +1,4 @@
-package router
+package http
 
 import (
 	"choseclothes/internal/user"
