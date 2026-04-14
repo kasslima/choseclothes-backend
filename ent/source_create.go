@@ -11,6 +11,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	uuid "github.com/gofrs/uuid/v5"
 )
 
 // SourceCreate is the builder for creating a Source entity.
@@ -27,14 +28,14 @@ func (_c *SourceCreate) SetName(v string) *SourceCreate {
 }
 
 // AddListingIDs adds the "listings" edge to the Listing entity by IDs.
-func (_c *SourceCreate) AddListingIDs(ids ...int) *SourceCreate {
+func (_c *SourceCreate) AddListingIDs(ids ...uuid.UUID) *SourceCreate {
 	_c.mutation.AddListingIDs(ids...)
 	return _c
 }
 
 // AddListings adds the "listings" edges to the Listing entity.
 func (_c *SourceCreate) AddListings(v ...*Listing) *SourceCreate {
-	ids := make([]int, len(v))
+	ids := make([]uuid.UUID, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -121,7 +122,7 @@ func (_c *SourceCreate) createSpec() (*Source, *sqlgraph.CreateSpec) {
 			Columns: []string{source.ListingsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

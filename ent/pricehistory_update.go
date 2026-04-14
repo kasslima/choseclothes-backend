@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	uuid "github.com/gofrs/uuid/v5"
 )
 
 // PriceHistoryUpdate is the builder for updating PriceHistory entities.
@@ -92,7 +93,7 @@ func (_u *PriceHistoryUpdate) SetNillableRecordedAt(v *time.Time) *PriceHistoryU
 }
 
 // SetListingID sets the "listing" edge to the Listing entity by ID.
-func (_u *PriceHistoryUpdate) SetListingID(id int) *PriceHistoryUpdate {
+func (_u *PriceHistoryUpdate) SetListingID(id uuid.UUID) *PriceHistoryUpdate {
 	_u.mutation.SetListingID(id)
 	return _u
 }
@@ -186,7 +187,7 @@ func (_u *PriceHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error
 			Columns: []string{pricehistory.ListingColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -199,7 +200,7 @@ func (_u *PriceHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error
 			Columns: []string{pricehistory.ListingColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -290,7 +291,7 @@ func (_u *PriceHistoryUpdateOne) SetNillableRecordedAt(v *time.Time) *PriceHisto
 }
 
 // SetListingID sets the "listing" edge to the Listing entity by ID.
-func (_u *PriceHistoryUpdateOne) SetListingID(id int) *PriceHistoryUpdateOne {
+func (_u *PriceHistoryUpdateOne) SetListingID(id uuid.UUID) *PriceHistoryUpdateOne {
 	_u.mutation.SetListingID(id)
 	return _u
 }
@@ -414,7 +415,7 @@ func (_u *PriceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *PriceHisto
 			Columns: []string{pricehistory.ListingColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -427,7 +428,7 @@ func (_u *PriceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *PriceHisto
 			Columns: []string{pricehistory.ListingColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

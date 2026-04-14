@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	uuid "github.com/gofrs/uuid/v5"
 )
 
 // PriceAlertUpdate is the builder for updating PriceAlert entities.
@@ -106,7 +107,7 @@ func (_u *PriceAlertUpdate) SetNillableCreatedAt(v *time.Time) *PriceAlertUpdate
 }
 
 // SetChannelID sets the "channel" edge to the Channel entity by ID.
-func (_u *PriceAlertUpdate) SetChannelID(id int) *PriceAlertUpdate {
+func (_u *PriceAlertUpdate) SetChannelID(id uuid.UUID) *PriceAlertUpdate {
 	_u.mutation.SetChannelID(id)
 	return _u
 }
@@ -117,7 +118,7 @@ func (_u *PriceAlertUpdate) SetChannel(v *Channel) *PriceAlertUpdate {
 }
 
 // SetListingID sets the "listing" edge to the Listing entity by ID.
-func (_u *PriceAlertUpdate) SetListingID(id int) *PriceAlertUpdate {
+func (_u *PriceAlertUpdate) SetListingID(id uuid.UUID) *PriceAlertUpdate {
 	_u.mutation.SetListingID(id)
 	return _u
 }
@@ -223,7 +224,7 @@ func (_u *PriceAlertUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 			Columns: []string{pricealert.ChannelColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(channel.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(channel.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -236,7 +237,7 @@ func (_u *PriceAlertUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 			Columns: []string{pricealert.ChannelColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(channel.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(channel.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -252,7 +253,7 @@ func (_u *PriceAlertUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 			Columns: []string{pricealert.ListingColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -265,7 +266,7 @@ func (_u *PriceAlertUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 			Columns: []string{pricealert.ListingColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -369,7 +370,7 @@ func (_u *PriceAlertUpdateOne) SetNillableCreatedAt(v *time.Time) *PriceAlertUpd
 }
 
 // SetChannelID sets the "channel" edge to the Channel entity by ID.
-func (_u *PriceAlertUpdateOne) SetChannelID(id int) *PriceAlertUpdateOne {
+func (_u *PriceAlertUpdateOne) SetChannelID(id uuid.UUID) *PriceAlertUpdateOne {
 	_u.mutation.SetChannelID(id)
 	return _u
 }
@@ -380,7 +381,7 @@ func (_u *PriceAlertUpdateOne) SetChannel(v *Channel) *PriceAlertUpdateOne {
 }
 
 // SetListingID sets the "listing" edge to the Listing entity by ID.
-func (_u *PriceAlertUpdateOne) SetListingID(id int) *PriceAlertUpdateOne {
+func (_u *PriceAlertUpdateOne) SetListingID(id uuid.UUID) *PriceAlertUpdateOne {
 	_u.mutation.SetListingID(id)
 	return _u
 }
@@ -516,7 +517,7 @@ func (_u *PriceAlertUpdateOne) sqlSave(ctx context.Context) (_node *PriceAlert, 
 			Columns: []string{pricealert.ChannelColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(channel.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(channel.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -529,7 +530,7 @@ func (_u *PriceAlertUpdateOne) sqlSave(ctx context.Context) (_node *PriceAlert, 
 			Columns: []string{pricealert.ChannelColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(channel.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(channel.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -545,7 +546,7 @@ func (_u *PriceAlertUpdateOne) sqlSave(ctx context.Context) (_node *PriceAlert, 
 			Columns: []string{pricealert.ListingColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -558,7 +559,7 @@ func (_u *PriceAlertUpdateOne) sqlSave(ctx context.Context) (_node *PriceAlert, 
 			Columns: []string{pricealert.ListingColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

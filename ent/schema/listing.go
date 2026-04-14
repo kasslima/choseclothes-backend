@@ -16,6 +16,10 @@ type Listing struct {
 
 func (Listing) Fields() []ent.Field {
 	return []ent.Field{
+		field.UUID("id", uuid.UUID{}).
+			Default(func() uuid.UUID {
+				return uuid.Must(uuid.NewV7())
+			}),
 		field.String("external_id").NotEmpty(),
 		field.String("title").NotEmpty(),
 		field.String("seller_name").Optional(),
@@ -29,12 +33,6 @@ func (Listing) Fields() []ent.Field {
 	}
 }
 
-func (Listing) ID() ent.Field {
-	return field.UUID("id", uuid.UUID{}).
-		Default(func() uuid.UUID {
-			return uuid.Must(uuid.NewV7())
-		})
-}
 
 func (Listing) Edges() []ent.Edge {
 	return []ent.Edge{

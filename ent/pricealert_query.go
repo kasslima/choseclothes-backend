@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	uuid "github.com/gofrs/uuid/v5"
 )
 
 // PriceAlertQuery is the builder for querying PriceAlert entities.
@@ -453,8 +454,8 @@ func (_q *PriceAlertQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*P
 }
 
 func (_q *PriceAlertQuery) loadChannel(ctx context.Context, query *ChannelQuery, nodes []*PriceAlert, init func(*PriceAlert), assign func(*PriceAlert, *Channel)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*PriceAlert)
+	ids := make([]uuid.UUID, 0, len(nodes))
+	nodeids := make(map[uuid.UUID][]*PriceAlert)
 	for i := range nodes {
 		if nodes[i].channel_price_alerts == nil {
 			continue
@@ -485,8 +486,8 @@ func (_q *PriceAlertQuery) loadChannel(ctx context.Context, query *ChannelQuery,
 	return nil
 }
 func (_q *PriceAlertQuery) loadListing(ctx context.Context, query *ListingQuery, nodes []*PriceAlert, init func(*PriceAlert), assign func(*PriceAlert, *Listing)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*PriceAlert)
+	ids := make([]uuid.UUID, 0, len(nodes))
+	nodeids := make(map[uuid.UUID][]*PriceAlert)
 	for i := range nodes {
 		if nodes[i].listing_price_alerts == nil {
 			continue

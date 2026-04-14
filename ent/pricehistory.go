@@ -11,6 +11,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	uuid "github.com/gofrs/uuid/v5"
 )
 
 // PriceHistory is the model entity for the PriceHistory schema.
@@ -27,7 +28,7 @@ type PriceHistory struct {
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PriceHistoryQuery when eager-loading is set.
 	Edges                 PriceHistoryEdges `json:"edges"`
-	listing_price_history *int
+	listing_price_history *uuid.UUID
 	selectValues          sql.SelectValues
 }
 
@@ -63,7 +64,7 @@ func (*PriceHistory) scanValues(columns []string) ([]any, error) {
 		case pricehistory.FieldRecordedAt:
 			values[i] = new(sql.NullTime)
 		case pricehistory.ForeignKeys[0]: // listing_price_history
-			values[i] = new(sql.NullInt64)
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -104,11 +105,11 @@ func (_m *PriceHistory) assignValues(columns []string, values []any) error {
 				_m.RecordedAt = value.Time
 			}
 		case pricehistory.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field listing_price_history", value)
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field listing_price_history", values[i])
 			} else if value.Valid {
-				_m.listing_price_history = new(int)
-				*_m.listing_price_history = int(value.Int64)
+				_m.listing_price_history = new(uuid.UUID)
+				*_m.listing_price_history = *value.S.(*uuid.UUID)
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

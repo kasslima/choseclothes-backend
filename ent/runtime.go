@@ -12,6 +12,8 @@ import (
 	"choseclothes/ent/source"
 	"choseclothes/ent/user"
 	"time"
+
+	uuid "github.com/gofrs/uuid/v5"
 )
 
 // The init function reads all schema descriptors with runtime code
@@ -21,47 +23,55 @@ func init() {
 	channelFields := schema.Channel{}.Fields()
 	_ = channelFields
 	// channelDescType is the schema descriptor for type field.
-	channelDescType := channelFields[0].Descriptor()
+	channelDescType := channelFields[1].Descriptor()
 	// channel.TypeValidator is a validator for the "type" field. It is called by the builders before save.
 	channel.TypeValidator = channelDescType.Validators[0].(func(string) error)
 	// channelDescExternalID is the schema descriptor for external_id field.
-	channelDescExternalID := channelFields[1].Descriptor()
+	channelDescExternalID := channelFields[2].Descriptor()
 	// channel.ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.
 	channel.ExternalIDValidator = channelDescExternalID.Validators[0].(func(string) error)
 	// channelDescIsActive is the schema descriptor for is_active field.
-	channelDescIsActive := channelFields[3].Descriptor()
+	channelDescIsActive := channelFields[4].Descriptor()
 	// channel.DefaultIsActive holds the default value on creation for the is_active field.
 	channel.DefaultIsActive = channelDescIsActive.Default.(bool)
 	// channelDescCreatedAt is the schema descriptor for created_at field.
-	channelDescCreatedAt := channelFields[4].Descriptor()
+	channelDescCreatedAt := channelFields[5].Descriptor()
 	// channel.DefaultCreatedAt holds the default value on creation for the created_at field.
 	channel.DefaultCreatedAt = channelDescCreatedAt.Default.(func() time.Time)
+	// channelDescID is the schema descriptor for id field.
+	channelDescID := channelFields[0].Descriptor()
+	// channel.DefaultID holds the default value on creation for the id field.
+	channel.DefaultID = channelDescID.Default.(func() uuid.UUID)
 	listingFields := schema.Listing{}.Fields()
 	_ = listingFields
 	// listingDescExternalID is the schema descriptor for external_id field.
-	listingDescExternalID := listingFields[0].Descriptor()
+	listingDescExternalID := listingFields[1].Descriptor()
 	// listing.ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.
 	listing.ExternalIDValidator = listingDescExternalID.Validators[0].(func(string) error)
 	// listingDescTitle is the schema descriptor for title field.
-	listingDescTitle := listingFields[1].Descriptor()
+	listingDescTitle := listingFields[2].Descriptor()
 	// listing.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	listing.TitleValidator = listingDescTitle.Validators[0].(func(string) error)
 	// listingDescProductURL is the schema descriptor for product_url field.
-	listingDescProductURL := listingFields[4].Descriptor()
+	listingDescProductURL := listingFields[5].Descriptor()
 	// listing.ProductURLValidator is a validator for the "product_url" field. It is called by the builders before save.
 	listing.ProductURLValidator = listingDescProductURL.Validators[0].(func(string) error)
 	// listingDescCurrency is the schema descriptor for currency field.
-	listingDescCurrency := listingFields[5].Descriptor()
+	listingDescCurrency := listingFields[6].Descriptor()
 	// listing.DefaultCurrency holds the default value on creation for the currency field.
 	listing.DefaultCurrency = listingDescCurrency.Default.(string)
 	// listingDescIsActive is the schema descriptor for is_active field.
-	listingDescIsActive := listingFields[6].Descriptor()
+	listingDescIsActive := listingFields[7].Descriptor()
 	// listing.DefaultIsActive holds the default value on creation for the is_active field.
 	listing.DefaultIsActive = listingDescIsActive.Default.(bool)
 	// listingDescCreatedAt is the schema descriptor for created_at field.
-	listingDescCreatedAt := listingFields[7].Descriptor()
+	listingDescCreatedAt := listingFields[8].Descriptor()
 	// listing.DefaultCreatedAt holds the default value on creation for the created_at field.
 	listing.DefaultCreatedAt = listingDescCreatedAt.Default.(func() time.Time)
+	// listingDescID is the schema descriptor for id field.
+	listingDescID := listingFields[0].Descriptor()
+	// listing.DefaultID holds the default value on creation for the id field.
+	listing.DefaultID = listingDescID.Default.(func() uuid.UUID)
 	pricealertFields := schema.PriceAlert{}.Fields()
 	_ = pricealertFields
 	// pricealertDescIsActive is the schema descriptor for is_active field.
@@ -81,13 +91,17 @@ func init() {
 	productFields := schema.Product{}.Fields()
 	_ = productFields
 	// productDescTitle is the schema descriptor for title field.
-	productDescTitle := productFields[0].Descriptor()
+	productDescTitle := productFields[1].Descriptor()
 	// product.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	product.TitleValidator = productDescTitle.Validators[0].(func(string) error)
 	// productDescCreatedAt is the schema descriptor for created_at field.
-	productDescCreatedAt := productFields[4].Descriptor()
+	productDescCreatedAt := productFields[5].Descriptor()
 	// product.DefaultCreatedAt holds the default value on creation for the created_at field.
 	product.DefaultCreatedAt = productDescCreatedAt.Default.(func() time.Time)
+	// productDescID is the schema descriptor for id field.
+	productDescID := productFields[0].Descriptor()
+	// product.DefaultID holds the default value on creation for the id field.
+	product.DefaultID = productDescID.Default.(func() uuid.UUID)
 	sourceFields := schema.Source{}.Fields()
 	_ = sourceFields
 	// sourceDescName is the schema descriptor for name field.
@@ -97,21 +111,25 @@ func init() {
 	userFields := schema.User{}.Fields()
 	_ = userFields
 	// userDescEmail is the schema descriptor for email field.
-	userDescEmail := userFields[1].Descriptor()
+	userDescEmail := userFields[2].Descriptor()
 	// user.EmailValidator is a validator for the "email" field. It is called by the builders before save.
 	user.EmailValidator = userDescEmail.Validators[0].(func(string) error)
 	// userDescIsSubscriber is the schema descriptor for is_subscriber field.
-	userDescIsSubscriber := userFields[5].Descriptor()
+	userDescIsSubscriber := userFields[6].Descriptor()
 	// user.DefaultIsSubscriber holds the default value on creation for the is_subscriber field.
 	user.DefaultIsSubscriber = userDescIsSubscriber.Default.(bool)
 	// userDescCreatedAt is the schema descriptor for created_at field.
-	userDescCreatedAt := userFields[6].Descriptor()
+	userDescCreatedAt := userFields[7].Descriptor()
 	// user.DefaultCreatedAt holds the default value on creation for the created_at field.
 	user.DefaultCreatedAt = userDescCreatedAt.Default.(func() time.Time)
 	// userDescUpdatedAt is the schema descriptor for updated_at field.
-	userDescUpdatedAt := userFields[7].Descriptor()
+	userDescUpdatedAt := userFields[8].Descriptor()
 	// user.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	user.DefaultUpdatedAt = userDescUpdatedAt.Default.(func() time.Time)
 	// user.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	user.UpdateDefaultUpdatedAt = userDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// userDescID is the schema descriptor for id field.
+	userDescID := userFields[0].Descriptor()
+	// user.DefaultID holds the default value on creation for the id field.
+	user.DefaultID = userDescID.Default.(func() uuid.UUID)
 }

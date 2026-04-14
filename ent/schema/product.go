@@ -15,6 +15,10 @@ type Product struct {
 
 func (Product) Fields() []ent.Field {
 	return []ent.Field{
+		field.UUID("id", uuid.UUID{}).
+			Default(func() uuid.UUID {
+				return uuid.Must(uuid.NewV7())
+			}),
 		field.String("title").NotEmpty(),
 		field.String("description").Optional(),
 		field.String("category").Optional(),
@@ -23,12 +27,6 @@ func (Product) Fields() []ent.Field {
 	}
 }
 
-func (Product) ID() ent.Field {
-	return field.UUID("id", uuid.UUID{}).
-		Default(func() uuid.UUID {
-			return uuid.Must(uuid.NewV7())
-		})
-}
 
 func (Product) Edges() []ent.Edge {
 	return []ent.Edge{

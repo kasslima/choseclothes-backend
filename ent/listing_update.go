@@ -17,6 +17,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	uuid "github.com/gofrs/uuid/v5"
 )
 
 // ListingUpdate is the builder for updating Listing entities.
@@ -164,7 +165,7 @@ func (_u *ListingUpdate) SetNillableCreatedAt(v *time.Time) *ListingUpdate {
 }
 
 // SetProductID sets the "product" edge to the Product entity by ID.
-func (_u *ListingUpdate) SetProductID(id int) *ListingUpdate {
+func (_u *ListingUpdate) SetProductID(id uuid.UUID) *ListingUpdate {
 	_u.mutation.SetProductID(id)
 	return _u
 }
@@ -331,7 +332,7 @@ func (_u *ListingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if err := _u.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(listing.Table, listing.Columns, sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(listing.Table, listing.Columns, sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -380,7 +381,7 @@ func (_u *ListingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Columns: []string{listing.ProductColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -393,7 +394,7 @@ func (_u *ListingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Columns: []string{listing.ProductColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -672,7 +673,7 @@ func (_u *ListingUpdateOne) SetNillableCreatedAt(v *time.Time) *ListingUpdateOne
 }
 
 // SetProductID sets the "product" edge to the Product entity by ID.
-func (_u *ListingUpdateOne) SetProductID(id int) *ListingUpdateOne {
+func (_u *ListingUpdateOne) SetProductID(id uuid.UUID) *ListingUpdateOne {
 	_u.mutation.SetProductID(id)
 	return _u
 }
@@ -852,7 +853,7 @@ func (_u *ListingUpdateOne) sqlSave(ctx context.Context) (_node *Listing, err er
 	if err := _u.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(listing.Table, listing.Columns, sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(listing.Table, listing.Columns, sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID))
 	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Listing.id" for update`)}
@@ -918,7 +919,7 @@ func (_u *ListingUpdateOne) sqlSave(ctx context.Context) (_node *Listing, err er
 			Columns: []string{listing.ProductColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -931,7 +932,7 @@ func (_u *ListingUpdateOne) sqlSave(ctx context.Context) (_node *Listing, err er
 			Columns: []string{listing.ProductColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(product.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

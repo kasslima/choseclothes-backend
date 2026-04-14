@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	uuid "github.com/gofrs/uuid/v5"
 )
 
 // ProductUpdate is the builder for updating Product entities.
@@ -118,14 +119,14 @@ func (_u *ProductUpdate) SetNillableCreatedAt(v *time.Time) *ProductUpdate {
 }
 
 // AddListingIDs adds the "listings" edge to the Listing entity by IDs.
-func (_u *ProductUpdate) AddListingIDs(ids ...int) *ProductUpdate {
+func (_u *ProductUpdate) AddListingIDs(ids ...uuid.UUID) *ProductUpdate {
 	_u.mutation.AddListingIDs(ids...)
 	return _u
 }
 
 // AddListings adds the "listings" edges to the Listing entity.
 func (_u *ProductUpdate) AddListings(v ...*Listing) *ProductUpdate {
-	ids := make([]int, len(v))
+	ids := make([]uuid.UUID, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -144,14 +145,14 @@ func (_u *ProductUpdate) ClearListings() *ProductUpdate {
 }
 
 // RemoveListingIDs removes the "listings" edge to Listing entities by IDs.
-func (_u *ProductUpdate) RemoveListingIDs(ids ...int) *ProductUpdate {
+func (_u *ProductUpdate) RemoveListingIDs(ids ...uuid.UUID) *ProductUpdate {
 	_u.mutation.RemoveListingIDs(ids...)
 	return _u
 }
 
 // RemoveListings removes "listings" edges to Listing entities.
 func (_u *ProductUpdate) RemoveListings(v ...*Listing) *ProductUpdate {
-	ids := make([]int, len(v))
+	ids := make([]uuid.UUID, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -199,7 +200,7 @@ func (_u *ProductUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if err := _u.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(product.Table, product.Columns, sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(product.Table, product.Columns, sqlgraph.NewFieldSpec(product.FieldID, field.TypeUUID))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -239,7 +240,7 @@ func (_u *ProductUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Columns: []string{product.ListingsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -252,7 +253,7 @@ func (_u *ProductUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Columns: []string{product.ListingsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -268,7 +269,7 @@ func (_u *ProductUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Columns: []string{product.ListingsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -385,14 +386,14 @@ func (_u *ProductUpdateOne) SetNillableCreatedAt(v *time.Time) *ProductUpdateOne
 }
 
 // AddListingIDs adds the "listings" edge to the Listing entity by IDs.
-func (_u *ProductUpdateOne) AddListingIDs(ids ...int) *ProductUpdateOne {
+func (_u *ProductUpdateOne) AddListingIDs(ids ...uuid.UUID) *ProductUpdateOne {
 	_u.mutation.AddListingIDs(ids...)
 	return _u
 }
 
 // AddListings adds the "listings" edges to the Listing entity.
 func (_u *ProductUpdateOne) AddListings(v ...*Listing) *ProductUpdateOne {
-	ids := make([]int, len(v))
+	ids := make([]uuid.UUID, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -411,14 +412,14 @@ func (_u *ProductUpdateOne) ClearListings() *ProductUpdateOne {
 }
 
 // RemoveListingIDs removes the "listings" edge to Listing entities by IDs.
-func (_u *ProductUpdateOne) RemoveListingIDs(ids ...int) *ProductUpdateOne {
+func (_u *ProductUpdateOne) RemoveListingIDs(ids ...uuid.UUID) *ProductUpdateOne {
 	_u.mutation.RemoveListingIDs(ids...)
 	return _u
 }
 
 // RemoveListings removes "listings" edges to Listing entities.
 func (_u *ProductUpdateOne) RemoveListings(v ...*Listing) *ProductUpdateOne {
-	ids := make([]int, len(v))
+	ids := make([]uuid.UUID, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -479,7 +480,7 @@ func (_u *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err er
 	if err := _u.check(); err != nil {
 		return _node, err
 	}
-	_spec := sqlgraph.NewUpdateSpec(product.Table, product.Columns, sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(product.Table, product.Columns, sqlgraph.NewFieldSpec(product.FieldID, field.TypeUUID))
 	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Product.id" for update`)}
@@ -536,7 +537,7 @@ func (_u *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err er
 			Columns: []string{product.ListingsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -549,7 +550,7 @@ func (_u *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err er
 			Columns: []string{product.ListingsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -565,7 +566,7 @@ func (_u *ProductUpdateOne) sqlSave(ctx context.Context) (_node *Product, err er
 			Columns: []string{product.ListingsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

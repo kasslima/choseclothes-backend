@@ -14,6 +14,10 @@ type User struct {
 
 func (User) Fields() []ent.Field {
 	return []ent.Field{
+		field.UUID("id", uuid.UUID{}).
+			Default(func() uuid.UUID {
+				return uuid.Must(uuid.NewV7())
+			}),
 		field.String("google_id").Optional().Unique(),
 		field.String("email").Unique().NotEmpty(),
 		field.String("password_hash").Optional(),
@@ -27,9 +31,3 @@ func (User) Fields() []ent.Field {
 	}
 }
 
-func (User) ID() ent.Field {
-	return field.UUID("id", uuid.UUID{}).
-		Default(func() uuid.UUID {
-			return uuid.Must(uuid.NewV7())
-		})
-}

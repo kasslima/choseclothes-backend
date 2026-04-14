@@ -12,13 +12,14 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	uuid "github.com/gofrs/uuid/v5"
 )
 
 // Listing is the model entity for the Listing schema.
 type Listing struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
+	ID uuid.UUID `json:"id,omitempty"`
 	// ExternalID holds the value of the "external_id" field.
 	ExternalID string `json:"external_id,omitempty"`
 	// Title holds the value of the "title" field.
@@ -38,7 +39,7 @@ type Listing struct {
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ListingQuery when eager-loading is set.
 	Edges            ListingEdges `json:"edges"`
-	product_listings *int
+	product_listings *uuid.UUID
 	source_listings  *int
 	selectValues     sql.SelectValues
 }
@@ -107,14 +108,14 @@ func (*Listing) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case listing.FieldSellerRating:
 			values[i] = new(sql.NullFloat64)
-		case listing.FieldID:
-			values[i] = new(sql.NullInt64)
 		case listing.FieldExternalID, listing.FieldTitle, listing.FieldSellerName, listing.FieldProductURL, listing.FieldCurrency:
 			values[i] = new(sql.NullString)
 		case listing.FieldCreatedAt:
 			values[i] = new(sql.NullTime)
+		case listing.FieldID:
+			values[i] = new(uuid.UUID)
 		case listing.ForeignKeys[0]: // product_listings
-			values[i] = new(sql.NullInt64)
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		case listing.ForeignKeys[1]: // source_listings
 			values[i] = new(sql.NullInt64)
 		default:
@@ -133,11 +134,11 @@ func (_m *Listing) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case listing.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value != nil {
+				_m.ID = *value
 			}
-			_m.ID = int(value.Int64)
 		case listing.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field external_id", values[i])
@@ -187,11 +188,11 @@ func (_m *Listing) assignValues(columns []string, values []any) error {
 				_m.CreatedAt = value.Time
 			}
 		case listing.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field product_listings", value)
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field product_listings", values[i])
 			} else if value.Valid {
-				_m.product_listings = new(int)
-				*_m.product_listings = int(value.Int64)
+				_m.product_listings = new(uuid.UUID)
+				*_m.product_listings = *value.S.(*uuid.UUID)
 			}
 		case listing.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {

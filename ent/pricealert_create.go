@@ -13,6 +13,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	uuid "github.com/gofrs/uuid/v5"
 )
 
 // PriceAlertCreate is the builder for creating a PriceAlert entity.
@@ -79,7 +80,7 @@ func (_c *PriceAlertCreate) SetNillableCreatedAt(v *time.Time) *PriceAlertCreate
 }
 
 // SetChannelID sets the "channel" edge to the Channel entity by ID.
-func (_c *PriceAlertCreate) SetChannelID(id int) *PriceAlertCreate {
+func (_c *PriceAlertCreate) SetChannelID(id uuid.UUID) *PriceAlertCreate {
 	_c.mutation.SetChannelID(id)
 	return _c
 }
@@ -90,7 +91,7 @@ func (_c *PriceAlertCreate) SetChannel(v *Channel) *PriceAlertCreate {
 }
 
 // SetListingID sets the "listing" edge to the Listing entity by ID.
-func (_c *PriceAlertCreate) SetListingID(id int) *PriceAlertCreate {
+func (_c *PriceAlertCreate) SetListingID(id uuid.UUID) *PriceAlertCreate {
 	_c.mutation.SetListingID(id)
 	return _c
 }
@@ -209,7 +210,7 @@ func (_c *PriceAlertCreate) createSpec() (*PriceAlert, *sqlgraph.CreateSpec) {
 			Columns: []string{pricealert.ChannelColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(channel.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(channel.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -226,7 +227,7 @@ func (_c *PriceAlertCreate) createSpec() (*PriceAlert, *sqlgraph.CreateSpec) {
 			Columns: []string{pricealert.ListingColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

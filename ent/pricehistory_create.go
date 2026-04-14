@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	uuid "github.com/gofrs/uuid/v5"
 )
 
 // PriceHistoryCreate is the builder for creating a PriceHistory entity.
@@ -56,7 +57,7 @@ func (_c *PriceHistoryCreate) SetNillableRecordedAt(v *time.Time) *PriceHistoryC
 }
 
 // SetListingID sets the "listing" edge to the Listing entity by ID.
-func (_c *PriceHistoryCreate) SetListingID(id int) *PriceHistoryCreate {
+func (_c *PriceHistoryCreate) SetListingID(id uuid.UUID) *PriceHistoryCreate {
 	_c.mutation.SetListingID(id)
 	return _c
 }
@@ -164,7 +165,7 @@ func (_c *PriceHistoryCreate) createSpec() (*PriceHistory, *sqlgraph.CreateSpec)
 			Columns: []string{pricehistory.ListingColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

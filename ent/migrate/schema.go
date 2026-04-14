@@ -11,7 +11,7 @@ import (
 var (
 	// ChannelsColumns holds the columns for the "channels" table.
 	ChannelsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID},
 		{Name: "type", Type: field.TypeString},
 		{Name: "external_id", Type: field.TypeString},
 		{Name: "name", Type: field.TypeString, Nullable: true},
@@ -26,7 +26,7 @@ var (
 	}
 	// ListingsColumns holds the columns for the "listings" table.
 	ListingsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID},
 		{Name: "external_id", Type: field.TypeString},
 		{Name: "title", Type: field.TypeString},
 		{Name: "seller_name", Type: field.TypeString, Nullable: true},
@@ -35,7 +35,7 @@ var (
 		{Name: "currency", Type: field.TypeString, Default: "USD"},
 		{Name: "is_active", Type: field.TypeBool, Default: true},
 		{Name: "created_at", Type: field.TypeTime},
-		{Name: "product_listings", Type: field.TypeInt},
+		{Name: "product_listings", Type: field.TypeUUID},
 		{Name: "source_listings", Type: field.TypeInt},
 	}
 	// ListingsTable holds the schema information for the "listings" table.
@@ -72,8 +72,8 @@ var (
 		{Name: "is_active", Type: field.TypeBool, Default: true},
 		{Name: "last_notified_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_at", Type: field.TypeTime},
-		{Name: "channel_price_alerts", Type: field.TypeInt},
-		{Name: "listing_price_alerts", Type: field.TypeInt},
+		{Name: "channel_price_alerts", Type: field.TypeUUID},
+		{Name: "listing_price_alerts", Type: field.TypeUUID},
 	}
 	// PriceAlertsTable holds the schema information for the "price_alerts" table.
 	PriceAlertsTable = &schema.Table{
@@ -101,7 +101,7 @@ var (
 		{Name: "price", Type: field.TypeFloat64},
 		{Name: "discount_price", Type: field.TypeFloat64, Nullable: true},
 		{Name: "recorded_at", Type: field.TypeTime},
-		{Name: "listing_price_history", Type: field.TypeInt},
+		{Name: "listing_price_history", Type: field.TypeUUID},
 	}
 	// PriceHistoryTable holds the schema information for the "price_history" table.
 	PriceHistoryTable = &schema.Table{
@@ -126,7 +126,7 @@ var (
 	}
 	// ProductsColumns holds the columns for the "products" table.
 	ProductsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID},
 		{Name: "title", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "category", Type: field.TypeString, Nullable: true},
@@ -152,7 +152,7 @@ var (
 	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "id", Type: field.TypeUUID},
 		{Name: "google_id", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "email", Type: field.TypeString, Unique: true},
 		{Name: "password_hash", Type: field.TypeString, Nullable: true},

@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	uuid "github.com/gofrs/uuid/v5"
 )
 
 // SourceUpdate is the builder for updating Source entities.
@@ -43,14 +44,14 @@ func (_u *SourceUpdate) SetNillableName(v *string) *SourceUpdate {
 }
 
 // AddListingIDs adds the "listings" edge to the Listing entity by IDs.
-func (_u *SourceUpdate) AddListingIDs(ids ...int) *SourceUpdate {
+func (_u *SourceUpdate) AddListingIDs(ids ...uuid.UUID) *SourceUpdate {
 	_u.mutation.AddListingIDs(ids...)
 	return _u
 }
 
 // AddListings adds the "listings" edges to the Listing entity.
 func (_u *SourceUpdate) AddListings(v ...*Listing) *SourceUpdate {
-	ids := make([]int, len(v))
+	ids := make([]uuid.UUID, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -69,14 +70,14 @@ func (_u *SourceUpdate) ClearListings() *SourceUpdate {
 }
 
 // RemoveListingIDs removes the "listings" edge to Listing entities by IDs.
-func (_u *SourceUpdate) RemoveListingIDs(ids ...int) *SourceUpdate {
+func (_u *SourceUpdate) RemoveListingIDs(ids ...uuid.UUID) *SourceUpdate {
 	_u.mutation.RemoveListingIDs(ids...)
 	return _u
 }
 
 // RemoveListings removes "listings" edges to Listing entities.
 func (_u *SourceUpdate) RemoveListings(v ...*Listing) *SourceUpdate {
-	ids := make([]int, len(v))
+	ids := make([]uuid.UUID, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -143,7 +144,7 @@ func (_u *SourceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Columns: []string{source.ListingsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -156,7 +157,7 @@ func (_u *SourceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Columns: []string{source.ListingsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -172,7 +173,7 @@ func (_u *SourceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Columns: []string{source.ListingsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -215,14 +216,14 @@ func (_u *SourceUpdateOne) SetNillableName(v *string) *SourceUpdateOne {
 }
 
 // AddListingIDs adds the "listings" edge to the Listing entity by IDs.
-func (_u *SourceUpdateOne) AddListingIDs(ids ...int) *SourceUpdateOne {
+func (_u *SourceUpdateOne) AddListingIDs(ids ...uuid.UUID) *SourceUpdateOne {
 	_u.mutation.AddListingIDs(ids...)
 	return _u
 }
 
 // AddListings adds the "listings" edges to the Listing entity.
 func (_u *SourceUpdateOne) AddListings(v ...*Listing) *SourceUpdateOne {
-	ids := make([]int, len(v))
+	ids := make([]uuid.UUID, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -241,14 +242,14 @@ func (_u *SourceUpdateOne) ClearListings() *SourceUpdateOne {
 }
 
 // RemoveListingIDs removes the "listings" edge to Listing entities by IDs.
-func (_u *SourceUpdateOne) RemoveListingIDs(ids ...int) *SourceUpdateOne {
+func (_u *SourceUpdateOne) RemoveListingIDs(ids ...uuid.UUID) *SourceUpdateOne {
 	_u.mutation.RemoveListingIDs(ids...)
 	return _u
 }
 
 // RemoveListings removes "listings" edges to Listing entities.
 func (_u *SourceUpdateOne) RemoveListings(v ...*Listing) *SourceUpdateOne {
-	ids := make([]int, len(v))
+	ids := make([]uuid.UUID, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -345,7 +346,7 @@ func (_u *SourceUpdateOne) sqlSave(ctx context.Context) (_node *Source, err erro
 			Columns: []string{source.ListingsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -358,7 +359,7 @@ func (_u *SourceUpdateOne) sqlSave(ctx context.Context) (_node *Source, err erro
 			Columns: []string{source.ListingsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -374,7 +375,7 @@ func (_u *SourceUpdateOne) sqlSave(ctx context.Context) (_node *Source, err erro
 			Columns: []string{source.ListingsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

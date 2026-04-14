@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	uuid "github.com/gofrs/uuid/v5"
 )
 
 // ProductCreate is the builder for creating a Product entity.
@@ -83,15 +84,29 @@ func (_c *ProductCreate) SetNillableCreatedAt(v *time.Time) *ProductCreate {
 	return _c
 }
 
+// SetID sets the "id" field.
+func (_c *ProductCreate) SetID(v uuid.UUID) *ProductCreate {
+	_c.mutation.SetID(v)
+	return _c
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (_c *ProductCreate) SetNillableID(v *uuid.UUID) *ProductCreate {
+	if v != nil {
+		_c.SetID(*v)
+	}
+	return _c
+}
+
 // AddListingIDs adds the "listings" edge to the Listing entity by IDs.
-func (_c *ProductCreate) AddListingIDs(ids ...int) *ProductCreate {
+func (_c *ProductCreate) AddListingIDs(ids ...uuid.UUID) *ProductCreate {
 	_c.mutation.AddListingIDs(ids...)
 	return _c
 }
 
 // AddListings adds the "listings" edges to the Listing entity.
 func (_c *ProductCreate) AddListings(v ...*Listing) *ProductCreate {
-	ids := make([]int, len(v))
+	ids := make([]uuid.UUID, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
 	}
@@ -137,6 +152,10 @@ func (_c *ProductCreate) defaults() {
 		v := product.DefaultCreatedAt()
 		_c.mutation.SetCreatedAt(v)
 	}
+	if _, ok := _c.mutation.ID(); !ok {
+		v := product.DefaultID()
+		_c.mutation.SetID(v)
+	}
 }
 
 // check runs all checks and user-defined validators on the builder.
@@ -166,8 +185,13 @@ func (_c *ProductCreate) sqlSave(ctx context.Context) (*Product, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
 	return _node, nil
@@ -176,8 +200,12 @@ func (_c *ProductCreate) sqlSave(ctx context.Context) (*Product, error) {
 func (_c *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Product{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(product.Table, sqlgraph.NewFieldSpec(product.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(product.Table, sqlgraph.NewFieldSpec(product.FieldID, field.TypeUUID))
 	)
+	if id, ok := _c.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
+	}
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(product.FieldTitle, field.TypeString, value)
 		_node.Title = value
@@ -206,7 +234,7 @@ func (_c *ProductCreate) createSpec() (*Product, *sqlgraph.CreateSpec) {
 			Columns: []string{product.ListingsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {
@@ -262,10 +290,6 @@ func (_c *ProductCreateBulk) Save(ctx context.Context) ([]*Product, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

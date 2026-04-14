@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	uuid "github.com/gofrs/uuid/v5"
 )
 
 // PriceHistoryQuery is the builder for querying PriceHistory entities.
@@ -410,8 +411,8 @@ func (_q *PriceHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 }
 
 func (_q *PriceHistoryQuery) loadListing(ctx context.Context, query *ListingQuery, nodes []*PriceHistory, init func(*PriceHistory), assign func(*PriceHistory, *Listing)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*PriceHistory)
+	ids := make([]uuid.UUID, 0, len(nodes))
+	nodeids := make(map[uuid.UUID][]*PriceHistory)
 	for i := range nodes {
 		if nodes[i].listing_price_history == nil {
 			continue

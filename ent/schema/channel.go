@@ -15,6 +15,10 @@ type Channel struct {
 
 func (Channel) Fields() []ent.Field {
 	return []ent.Field{
+		field.UUID("id", uuid.UUID{}).
+			Default(func() uuid.UUID {
+				return uuid.Must(uuid.NewV7())
+			}),
 		field.String("type").NotEmpty(),
 		field.String("external_id").NotEmpty(),
 		field.String("name").Optional(),
@@ -24,12 +28,6 @@ func (Channel) Fields() []ent.Field {
 	}
 }
 
-func (Channel) ID() ent.Field {
-	return field.UUID("id", uuid.UUID{}).
-		Default(func() uuid.UUID {
-			return uuid.Must(uuid.NewV7())
-		})
-}
 
 func (Channel) Edges() []ent.Edge {
 	return []ent.Edge{

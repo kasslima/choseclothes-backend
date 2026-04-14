@@ -19,6 +19,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	uuid "github.com/gofrs/uuid/v5"
 )
 
 const (
@@ -44,7 +45,7 @@ type ChannelMutation struct {
 	config
 	op                  Op
 	typ                 string
-	id                  *int
+	id                  *uuid.UUID
 	_type               *string
 	external_id         *string
 	name                *string
@@ -79,7 +80,7 @@ func newChannelMutation(c config, op Op, opts ...channelOption) *ChannelMutation
 }
 
 // withChannelID sets the ID field of the mutation.
-func withChannelID(id int) channelOption {
+func withChannelID(id uuid.UUID) channelOption {
 	return func(m *ChannelMutation) {
 		var (
 			err   error
@@ -129,9 +130,15 @@ func (m ChannelMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Channel entities.
+func (m *ChannelMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *ChannelMutation) ID() (id int, exists bool) {
+func (m *ChannelMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -142,12 +149,12 @@ func (m *ChannelMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *ChannelMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *ChannelMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -701,7 +708,7 @@ type ListingMutation struct {
 	config
 	op                   Op
 	typ                  string
-	id                   *int
+	id                   *uuid.UUID
 	external_id          *string
 	title                *string
 	seller_name          *string
@@ -712,7 +719,7 @@ type ListingMutation struct {
 	is_active            *bool
 	created_at           *time.Time
 	clearedFields        map[string]struct{}
-	product              *int
+	product              *uuid.UUID
 	clearedproduct       bool
 	source               *int
 	clearedsource        bool
@@ -747,7 +754,7 @@ func newListingMutation(c config, op Op, opts ...listingOption) *ListingMutation
 }
 
 // withListingID sets the ID field of the mutation.
-func withListingID(id int) listingOption {
+func withListingID(id uuid.UUID) listingOption {
 	return func(m *ListingMutation) {
 		var (
 			err   error
@@ -797,9 +804,15 @@ func (m ListingMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Listing entities.
+func (m *ListingMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *ListingMutation) ID() (id int, exists bool) {
+func (m *ListingMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -810,12 +823,12 @@ func (m *ListingMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *ListingMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *ListingMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -1161,7 +1174,7 @@ func (m *ListingMutation) ResetCreatedAt() {
 }
 
 // SetProductID sets the "product" edge to the Product entity by id.
-func (m *ListingMutation) SetProductID(id int) {
+func (m *ListingMutation) SetProductID(id uuid.UUID) {
 	m.product = &id
 }
 
@@ -1176,7 +1189,7 @@ func (m *ListingMutation) ProductCleared() bool {
 }
 
 // ProductID returns the "product" edge ID in the mutation.
-func (m *ListingMutation) ProductID() (id int, exists bool) {
+func (m *ListingMutation) ProductID() (id uuid.UUID, exists bool) {
 	if m.product != nil {
 		return *m.product, true
 	}
@@ -1186,7 +1199,7 @@ func (m *ListingMutation) ProductID() (id int, exists bool) {
 // ProductIDs returns the "product" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // ProductID instead. It exists only for internal usage by the builders.
-func (m *ListingMutation) ProductIDs() (ids []int) {
+func (m *ListingMutation) ProductIDs() (ids []uuid.UUID) {
 	if id := m.product; id != nil {
 		ids = append(ids, *id)
 	}
@@ -1784,9 +1797,9 @@ type PriceAlertMutation struct {
 	last_notified_at *time.Time
 	created_at       *time.Time
 	clearedFields    map[string]struct{}
-	channel          *int
+	channel          *uuid.UUID
 	clearedchannel   bool
-	listing          *int
+	listing          *uuid.UUID
 	clearedlisting   bool
 	done             bool
 	oldValue         func(context.Context) (*PriceAlert, error)
@@ -2083,7 +2096,7 @@ func (m *PriceAlertMutation) ResetCreatedAt() {
 }
 
 // SetChannelID sets the "channel" edge to the Channel entity by id.
-func (m *PriceAlertMutation) SetChannelID(id int) {
+func (m *PriceAlertMutation) SetChannelID(id uuid.UUID) {
 	m.channel = &id
 }
 
@@ -2098,7 +2111,7 @@ func (m *PriceAlertMutation) ChannelCleared() bool {
 }
 
 // ChannelID returns the "channel" edge ID in the mutation.
-func (m *PriceAlertMutation) ChannelID() (id int, exists bool) {
+func (m *PriceAlertMutation) ChannelID() (id uuid.UUID, exists bool) {
 	if m.channel != nil {
 		return *m.channel, true
 	}
@@ -2108,7 +2121,7 @@ func (m *PriceAlertMutation) ChannelID() (id int, exists bool) {
 // ChannelIDs returns the "channel" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // ChannelID instead. It exists only for internal usage by the builders.
-func (m *PriceAlertMutation) ChannelIDs() (ids []int) {
+func (m *PriceAlertMutation) ChannelIDs() (ids []uuid.UUID) {
 	if id := m.channel; id != nil {
 		ids = append(ids, *id)
 	}
@@ -2122,7 +2135,7 @@ func (m *PriceAlertMutation) ResetChannel() {
 }
 
 // SetListingID sets the "listing" edge to the Listing entity by id.
-func (m *PriceAlertMutation) SetListingID(id int) {
+func (m *PriceAlertMutation) SetListingID(id uuid.UUID) {
 	m.listing = &id
 }
 
@@ -2137,7 +2150,7 @@ func (m *PriceAlertMutation) ListingCleared() bool {
 }
 
 // ListingID returns the "listing" edge ID in the mutation.
-func (m *PriceAlertMutation) ListingID() (id int, exists bool) {
+func (m *PriceAlertMutation) ListingID() (id uuid.UUID, exists bool) {
 	if m.listing != nil {
 		return *m.listing, true
 	}
@@ -2147,7 +2160,7 @@ func (m *PriceAlertMutation) ListingID() (id int, exists bool) {
 // ListingIDs returns the "listing" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // ListingID instead. It exists only for internal usage by the builders.
-func (m *PriceAlertMutation) ListingIDs() (ids []int) {
+func (m *PriceAlertMutation) ListingIDs() (ids []uuid.UUID) {
 	if id := m.listing; id != nil {
 		ids = append(ids, *id)
 	}
@@ -2476,7 +2489,7 @@ type PriceHistoryMutation struct {
 	adddiscount_price *float64
 	recorded_at       *time.Time
 	clearedFields     map[string]struct{}
-	listing           *int
+	listing           *uuid.UUID
 	clearedlisting    bool
 	done              bool
 	oldValue          func(context.Context) (*PriceHistory, error)
@@ -2744,7 +2757,7 @@ func (m *PriceHistoryMutation) ResetRecordedAt() {
 }
 
 // SetListingID sets the "listing" edge to the Listing entity by id.
-func (m *PriceHistoryMutation) SetListingID(id int) {
+func (m *PriceHistoryMutation) SetListingID(id uuid.UUID) {
 	m.listing = &id
 }
 
@@ -2759,7 +2772,7 @@ func (m *PriceHistoryMutation) ListingCleared() bool {
 }
 
 // ListingID returns the "listing" edge ID in the mutation.
-func (m *PriceHistoryMutation) ListingID() (id int, exists bool) {
+func (m *PriceHistoryMutation) ListingID() (id uuid.UUID, exists bool) {
 	if m.listing != nil {
 		return *m.listing, true
 	}
@@ -2769,7 +2782,7 @@ func (m *PriceHistoryMutation) ListingID() (id int, exists bool) {
 // ListingIDs returns the "listing" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // ListingID instead. It exists only for internal usage by the builders.
-func (m *PriceHistoryMutation) ListingIDs() (ids []int) {
+func (m *PriceHistoryMutation) ListingIDs() (ids []uuid.UUID) {
 	if id := m.listing; id != nil {
 		ids = append(ids, *id)
 	}
@@ -3062,15 +3075,15 @@ type ProductMutation struct {
 	config
 	op              Op
 	typ             string
-	id              *int
+	id              *uuid.UUID
 	title           *string
 	description     *string
 	category        *string
 	image_url       *string
 	created_at      *time.Time
 	clearedFields   map[string]struct{}
-	listings        map[int]struct{}
-	removedlistings map[int]struct{}
+	listings        map[uuid.UUID]struct{}
+	removedlistings map[uuid.UUID]struct{}
 	clearedlistings bool
 	done            bool
 	oldValue        func(context.Context) (*Product, error)
@@ -3097,7 +3110,7 @@ func newProductMutation(c config, op Op, opts ...productOption) *ProductMutation
 }
 
 // withProductID sets the ID field of the mutation.
-func withProductID(id int) productOption {
+func withProductID(id uuid.UUID) productOption {
 	return func(m *ProductMutation) {
 		var (
 			err   error
@@ -3147,9 +3160,15 @@ func (m ProductMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Product entities.
+func (m *ProductMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *ProductMutation) ID() (id int, exists bool) {
+func (m *ProductMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -3160,12 +3179,12 @@ func (m *ProductMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *ProductMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *ProductMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -3395,9 +3414,9 @@ func (m *ProductMutation) ResetCreatedAt() {
 }
 
 // AddListingIDs adds the "listings" edge to the Listing entity by ids.
-func (m *ProductMutation) AddListingIDs(ids ...int) {
+func (m *ProductMutation) AddListingIDs(ids ...uuid.UUID) {
 	if m.listings == nil {
-		m.listings = make(map[int]struct{})
+		m.listings = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		m.listings[ids[i]] = struct{}{}
@@ -3415,9 +3434,9 @@ func (m *ProductMutation) ListingsCleared() bool {
 }
 
 // RemoveListingIDs removes the "listings" edge to the Listing entity by IDs.
-func (m *ProductMutation) RemoveListingIDs(ids ...int) {
+func (m *ProductMutation) RemoveListingIDs(ids ...uuid.UUID) {
 	if m.removedlistings == nil {
-		m.removedlistings = make(map[int]struct{})
+		m.removedlistings = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		delete(m.listings, ids[i])
@@ -3426,7 +3445,7 @@ func (m *ProductMutation) RemoveListingIDs(ids ...int) {
 }
 
 // RemovedListings returns the removed IDs of the "listings" edge to the Listing entity.
-func (m *ProductMutation) RemovedListingsIDs() (ids []int) {
+func (m *ProductMutation) RemovedListingsIDs() (ids []uuid.UUID) {
 	for id := range m.removedlistings {
 		ids = append(ids, id)
 	}
@@ -3434,7 +3453,7 @@ func (m *ProductMutation) RemovedListingsIDs() (ids []int) {
 }
 
 // ListingsIDs returns the "listings" edge IDs in the mutation.
-func (m *ProductMutation) ListingsIDs() (ids []int) {
+func (m *ProductMutation) ListingsIDs() (ids []uuid.UUID) {
 	for id := range m.listings {
 		ids = append(ids, id)
 	}
@@ -3760,8 +3779,8 @@ type SourceMutation struct {
 	id              *int
 	name            *string
 	clearedFields   map[string]struct{}
-	listings        map[int]struct{}
-	removedlistings map[int]struct{}
+	listings        map[uuid.UUID]struct{}
+	removedlistings map[uuid.UUID]struct{}
 	clearedlistings bool
 	done            bool
 	oldValue        func(context.Context) (*Source, error)
@@ -3903,9 +3922,9 @@ func (m *SourceMutation) ResetName() {
 }
 
 // AddListingIDs adds the "listings" edge to the Listing entity by ids.
-func (m *SourceMutation) AddListingIDs(ids ...int) {
+func (m *SourceMutation) AddListingIDs(ids ...uuid.UUID) {
 	if m.listings == nil {
-		m.listings = make(map[int]struct{})
+		m.listings = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		m.listings[ids[i]] = struct{}{}
@@ -3923,9 +3942,9 @@ func (m *SourceMutation) ListingsCleared() bool {
 }
 
 // RemoveListingIDs removes the "listings" edge to the Listing entity by IDs.
-func (m *SourceMutation) RemoveListingIDs(ids ...int) {
+func (m *SourceMutation) RemoveListingIDs(ids ...uuid.UUID) {
 	if m.removedlistings == nil {
-		m.removedlistings = make(map[int]struct{})
+		m.removedlistings = make(map[uuid.UUID]struct{})
 	}
 	for i := range ids {
 		delete(m.listings, ids[i])
@@ -3934,7 +3953,7 @@ func (m *SourceMutation) RemoveListingIDs(ids ...int) {
 }
 
 // RemovedListings returns the removed IDs of the "listings" edge to the Listing entity.
-func (m *SourceMutation) RemovedListingsIDs() (ids []int) {
+func (m *SourceMutation) RemovedListingsIDs() (ids []uuid.UUID) {
 	for id := range m.removedlistings {
 		ids = append(ids, id)
 	}
@@ -3942,7 +3961,7 @@ func (m *SourceMutation) RemovedListingsIDs() (ids []int) {
 }
 
 // ListingsIDs returns the "listings" edge IDs in the mutation.
-func (m *SourceMutation) ListingsIDs() (ids []int) {
+func (m *SourceMutation) ListingsIDs() (ids []uuid.UUID) {
 	for id := range m.listings {
 		ids = append(ids, id)
 	}
@@ -4176,7 +4195,7 @@ type UserMutation struct {
 	config
 	op              Op
 	typ             string
-	id              *int
+	id              *uuid.UUID
 	google_id       *string
 	email           *string
 	password_hash   *string
@@ -4211,7 +4230,7 @@ func newUserMutation(c config, op Op, opts ...userOption) *UserMutation {
 }
 
 // withUserID sets the ID field of the mutation.
-func withUserID(id int) userOption {
+func withUserID(id uuid.UUID) userOption {
 	return func(m *UserMutation) {
 		var (
 			err   error
@@ -4261,9 +4280,15 @@ func (m UserMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of User entities.
+func (m *UserMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *UserMutation) ID() (id int, exists bool) {
+func (m *UserMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -4274,12 +4299,12 @@ func (m *UserMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *UserMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *UserMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):

@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	uuid "github.com/gofrs/uuid/v5"
 )
 
 // PriceAlert is the model entity for the PriceAlert schema.
@@ -30,8 +31,8 @@ type PriceAlert struct {
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PriceAlertQuery when eager-loading is set.
 	Edges                PriceAlertEdges `json:"edges"`
-	channel_price_alerts *int
-	listing_price_alerts *int
+	channel_price_alerts *uuid.UUID
+	listing_price_alerts *uuid.UUID
 	selectValues         sql.SelectValues
 }
 
@@ -82,9 +83,9 @@ func (*PriceAlert) scanValues(columns []string) ([]any, error) {
 		case pricealert.FieldLastNotifiedAt, pricealert.FieldCreatedAt:
 			values[i] = new(sql.NullTime)
 		case pricealert.ForeignKeys[0]: // channel_price_alerts
-			values[i] = new(sql.NullInt64)
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		case pricealert.ForeignKeys[1]: // listing_price_alerts
-			values[i] = new(sql.NullInt64)
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -132,18 +133,18 @@ func (_m *PriceAlert) assignValues(columns []string, values []any) error {
 				_m.CreatedAt = value.Time
 			}
 		case pricealert.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field channel_price_alerts", value)
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field channel_price_alerts", values[i])
 			} else if value.Valid {
-				_m.channel_price_alerts = new(int)
-				*_m.channel_price_alerts = int(value.Int64)
+				_m.channel_price_alerts = new(uuid.UUID)
+				*_m.channel_price_alerts = *value.S.(*uuid.UUID)
 			}
 		case pricealert.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field listing_price_alerts", value)
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field listing_price_alerts", values[i])
 			} else if value.Valid {
-				_m.listing_price_alerts = new(int)
-				*_m.listing_price_alerts = int(value.Int64)
+				_m.listing_price_alerts = new(uuid.UUID)
+				*_m.listing_price_alerts = *value.S.(*uuid.UUID)
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

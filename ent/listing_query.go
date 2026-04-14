@@ -18,6 +18,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	uuid "github.com/gofrs/uuid/v5"
 )
 
 // ListingQuery is the builder for querying Listing entities.
@@ -180,8 +181,8 @@ func (_q *ListingQuery) FirstX(ctx context.Context) *Listing {
 
 // FirstID returns the first Listing ID from the query.
 // Returns a *NotFoundError when no Listing ID was found.
-func (_q *ListingQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (_q *ListingQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
@@ -193,7 +194,7 @@ func (_q *ListingQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (_q *ListingQuery) FirstIDX(ctx context.Context) int {
+func (_q *ListingQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -231,8 +232,8 @@ func (_q *ListingQuery) OnlyX(ctx context.Context) *Listing {
 // OnlyID is like Only, but returns the only Listing ID in the query.
 // Returns a *NotSingularError when more than one Listing ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (_q *ListingQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (_q *ListingQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
@@ -248,7 +249,7 @@ func (_q *ListingQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (_q *ListingQuery) OnlyIDX(ctx context.Context) int {
+func (_q *ListingQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -276,7 +277,7 @@ func (_q *ListingQuery) AllX(ctx context.Context) []*Listing {
 }
 
 // IDs executes the query and returns a list of Listing IDs.
-func (_q *ListingQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (_q *ListingQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
 	if _q.ctx.Unique == nil && _q.path != nil {
 		_q.Unique(true)
 	}
@@ -288,7 +289,7 @@ func (_q *ListingQuery) IDs(ctx context.Context) (ids []int, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (_q *ListingQuery) IDsX(ctx context.Context) []int {
+func (_q *ListingQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -542,8 +543,8 @@ func (_q *ListingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*List
 }
 
 func (_q *ListingQuery) loadProduct(ctx context.Context, query *ProductQuery, nodes []*Listing, init func(*Listing), assign func(*Listing, *Product)) error {
-	ids := make([]int, 0, len(nodes))
-	nodeids := make(map[int][]*Listing)
+	ids := make([]uuid.UUID, 0, len(nodes))
+	nodeids := make(map[uuid.UUID][]*Listing)
 	for i := range nodes {
 		if nodes[i].product_listings == nil {
 			continue
@@ -607,7 +608,7 @@ func (_q *ListingQuery) loadSource(ctx context.Context, query *SourceQuery, node
 }
 func (_q *ListingQuery) loadPriceAlerts(ctx context.Context, query *PriceAlertQuery, nodes []*Listing, init func(*Listing), assign func(*Listing, *PriceAlert)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int]*Listing)
+	nodeids := make(map[uuid.UUID]*Listing)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -638,7 +639,7 @@ func (_q *ListingQuery) loadPriceAlerts(ctx context.Context, query *PriceAlertQu
 }
 func (_q *ListingQuery) loadPriceHistory(ctx context.Context, query *PriceHistoryQuery, nodes []*Listing, init func(*Listing), assign func(*Listing, *PriceHistory)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int]*Listing)
+	nodeids := make(map[uuid.UUID]*Listing)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -678,7 +679,7 @@ func (_q *ListingQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (_q *ListingQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(listing.Table, listing.Columns, sqlgraph.NewFieldSpec(listing.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(listing.Table, listing.Columns, sqlgraph.NewFieldSpec(listing.FieldID, field.TypeUUID))
 	_spec.From = _q.sql
 	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
