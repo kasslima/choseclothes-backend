@@ -17,7 +17,7 @@ CREATE TABLE listings (
     product_id INT NOT NULL,
     source_id INT NOT NULL,
 
-    external_id VARCHAR(100) NOT NULL, -- ID da plataforma
+    external_id VARCHAR(100) NOT NULL,
     title VARCHAR(255) NOT NULL,
     seller_name VARCHAR(255),
     seller_rating DECIMAL(3,2),
@@ -47,17 +47,25 @@ CREATE TABLE price_history (
     FOREIGN KEY (listing_id) REFERENCES listings(id) ON DELETE CASCADE
 );
 
-CREATE TABLE telegram_groups (
+CREATE TABLE channels (
     id SERIAL PRIMARY KEY,
-    telegram_group_id BIGINT UNIQUE NOT NULL,
-    group_name VARCHAR(255),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+    type VARCHAR(20) NOT NULL, -- telegram | whatsapp | email | web
+    external_id VARCHAR(255) NOT NULL, 
+
+    name VARCHAR(255),
+
+    is_active BOOLEAN DEFAULT TRUE,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    UNIQUE(type, external_id)
 );
 
 CREATE TABLE price_alerts (
     id SERIAL PRIMARY KEY,
 
-    group_id INT NOT NULL,
+    channel_id INT NOT NULL,
     listing_id INT NOT NULL,
 
     target_price DECIMAL(10,2),
@@ -93,4 +101,4 @@ CREATE INDEX idx_price_listing ON price_history(listing_id);
 CREATE INDEX idx_price_recorded ON price_history(recorded_at);
 
 CREATE INDEX idx_alert_listing ON price_alerts(listing_id);
-CREATE INDEX idx_alert_group ON price_alerts(group_id);
+CREATE INDEX idx_alert_channel ON price_alerts(channel_id);
