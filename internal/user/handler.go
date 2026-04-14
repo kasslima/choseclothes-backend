@@ -5,6 +5,7 @@ import (
 	"choseclothes/internal/shared/response"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 type UserHandler struct {
@@ -18,32 +19,31 @@ func NewUserHandler(service Service) *UserHandler {
 }
 
 func (h *UserHandler) GetUsers(c *gin.Context) {
-	users := h.service.GetUsers()
+	users, err := h.service.GetUsers(c.Request.Context())
+	if err != nil {
+		response.InternalError(c, err)
+		return
+	}
+
 	response.OK(c, users)
 }
 
 func (h *UserHandler) CreateUser(c *gin.Context) {
-	var user User
+	var input CreateUserInput
 
-	if err := c.ShouldBindJSON(&user); err != nil {
+	if err := c.ShouldBindJSON(&input); err != nil {
 
-		if err.Error() == "EOF" {
-			errors.Respond(c, errors.NewBadRequest("body is required"))
+		if validationErrors, ok := err.(validator.ValidationErrors); ok {
+			errors.Respond(c, errors.NewValidationError(errors.ParseValidationErrors(validationErrors)))
 			return
 		}
 
-		validationErrors := errors.ParseValidationErrors(err)
-
-		if len(validationErrors) > 0 {
-			errors.Respond(c, errors.NewValidationError(validationErrors))
-			return
-		}
-
-		errors.Respond(c, errors.NewBadRequest(err.Error()))
+		appErr := errors.ParseBindError(err)
+		errors.Respond(c, appErr)
 		return
 	}
 
-	createdUser, err := h.service.CreateUser(user)
+	createdUser, err := h.service.CreateUser(c.Request.Context(), input)
 	if err != nil {
 		if appErr, ok := err.(errors.AppError); ok {
 			errors.Respond(c, appErr)
