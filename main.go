@@ -1,14 +1,14 @@
 package main
 
 import (
-	"choseclothes/internal/shared/router"
+	"choseclothes/internal/http"
 	"choseclothes/internal/user"
 )
 
 func main() {
 	userHandler := &user.UserHandler{}
 
-	r := router.SetupRouter(userHandler)
+	r := http.SetupRouter(userHandler)
 
 	r.Run()
 }
