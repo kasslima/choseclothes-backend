@@ -1,10 +1,14 @@
 package user
 
-import "choseclothes/ent"
+import (
+	"context"
+
+	"choseclothes/ent"
+)
 
 type Repository interface {
-	GetUsers() []User
-	CreateUser(user User) error
+	GetUsers(ctx context.Context) ([]*ent.User, error)
+	CreateUser(ctx context.Context, u CreateUserInput) (*ent.User, error)
 }
 
 type repository struct {
@@ -17,12 +21,25 @@ func NewRepository(client *ent.Client) Repository {
 	}
 }
 
-func (r *repository) GetUsers() []User {
-
-	return nil
+func (r *repository) GetUsers(ctx context.Context) ([]*ent.User, error) {
+	return r.client.User.Query().All(ctx)
 }
 
-func (r *repository) CreateUser(user User) error {
+func (r *repository) CreateUser(ctx context.Context, u CreateUserInput) (*ent.User, error) {
+	return r.client.User.
+		Create().
+		SetNillableGoogleID(nillableString(u.GoogleId)).
+		SetEmail(u.Email).
+		SetNillablePasswordHash(nillableString(u.Password)).
+		SetNillableName(nillableString(u.Name)).
+		SetIsSubscriber(u.IsSubscriber).
+		Save(ctx)
+}
 
-	return nil
+// helper simples pra optional string
+func nillableString(s string) *string {
+	if s == "" {
+		return nil
+	}
+	return &s
 }
