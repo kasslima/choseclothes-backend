@@ -2,6 +2,8 @@ package user
 
 import (
 	"context"
+
+	"choseclothes/internal/shared/apperrors"
 )
 
 type service struct {
@@ -43,7 +45,11 @@ func (s *service) GetUsers(ctx context.Context) ([]User, error) {
 func (s *service) CreateUser(ctx context.Context, input CreateUserInput) (User, error) {
 	u, err := s.repo.CreateUser(ctx, input)
 	if err != nil {
-		return User{}, err
+		if apperrors.IsUniqueViolation(err) {
+			return User{}, apperrors.NewConflict("email already exists")
+		}
+
+		return User{}, apperrors.NewInternal()
 	}
 
 	return User{

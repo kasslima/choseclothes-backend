@@ -1,8 +1,9 @@
 package user
 
 import (
-	"choseclothes/internal/shared/errors"
+	"choseclothes/internal/shared/apperrors"
 	"choseclothes/internal/shared/response"
+	"errors"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -34,23 +35,30 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 	if err := c.ShouldBindJSON(&input); err != nil {
 
 		if validationErrors, ok := err.(validator.ValidationErrors); ok {
-			errors.Respond(c, errors.NewValidationError(errors.ParseValidationErrors(validationErrors)))
+			apperrors.Respond(
+				c,
+				apperrors.NewValidationError(
+					apperrors.ParseValidationErrors(validationErrors),
+				),
+			)
 			return
 		}
 
-		appErr := errors.ParseBindError(err)
-		errors.Respond(c, appErr)
+		appErr := apperrors.ParseBindError(err)
+		apperrors.Respond(c, appErr)
 		return
 	}
 
 	createdUser, err := h.service.CreateUser(c.Request.Context(), input)
 	if err != nil {
-		if appErr, ok := err.(errors.AppError); ok {
-			errors.Respond(c, appErr)
+
+		var appErr apperrors.AppError
+		if errors.As(err, &appErr) {
+			apperrors.Respond(c, appErr)
 			return
 		}
 
-		errors.Respond(c, errors.NewInternal(err.Error()))
+		apperrors.Respond(c, apperrors.NewInternal())
 		return
 	}
 

@@ -36,7 +36,6 @@ func (r *repository) CreateUser(ctx context.Context, u CreateUserInput) (*ent.Us
 		Save(ctx)
 }
 
-// helper simples pra optional string
 func nillableString(s string) *string {
 	if s == "" {
 		return nil
