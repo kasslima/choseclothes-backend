@@ -1,25 +1,28 @@
 package user
 
+import "choseclothes/ent"
+
 type Repository interface {
 	GetUsers() []User
 	CreateUser(user User) error
 }
 
 type repository struct {
-	users []User
+	client *ent.Client
 }
 
-func NewRepository() Repository {
+func NewRepository(client *ent.Client) Repository {
 	return &repository{
-		users: []User{},
+		client: client,
 	}
 }
 
 func (r *repository) GetUsers() []User {
-	return r.users
+
+	return nil
 }
 
 func (r *repository) CreateUser(user User) error {
-	r.users = append(r.users, user)
+
 	return nil
 }

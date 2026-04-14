@@ -32,5 +32,6 @@ go.work.sum
 # .vscode/
 
 
-
+bin/
+dist/
 todo.md
