@@ -1,4 +1,4 @@
-package errors
+package apperrors
 
 import (
 	"encoding/json"
@@ -6,6 +6,8 @@ import (
 	"strings"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/jackc/pgconn"
+	"github.com/lib/pq"
 )
 
 func ParseValidationErrors(err error) []FieldError {
@@ -60,4 +62,18 @@ func ParseBindError(err error) AppError {
 	}
 
 	return NewBadRequest("invalid request body")
+}
+
+func IsUniqueViolation(err error) bool {
+	var pgErr *pgconn.PgError
+	if errors.As(err, &pgErr) {
+		return pgErr.Code == "23505"
+	}
+
+	var pqErr *pq.Error
+	if errors.As(err, &pqErr) {
+		return pqErr.Code == "23505"
+	}
+
+	return false
 }

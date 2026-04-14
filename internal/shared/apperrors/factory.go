@@ -1,4 +1,4 @@
-package errors
+package apperrors
 
 func NewBadRequest(details string) AppError {
 	return AppError{
@@ -24,6 +24,13 @@ func NewNotFound(details string) AppError {
 	}
 }
 
+func NewConflict(msg string) AppError {
+	return AppError{
+		Code:    409,
+		Message: msg,
+	}
+}
+
 func NewTooManyRequests(details string) AppError {
 	return AppError{
 		Code:    429,
@@ -32,11 +39,10 @@ func NewTooManyRequests(details string) AppError {
 	}
 }
 
-func NewInternal(details string) AppError {
+func NewInternal() AppError {
 	return AppError{
 		Code:    500,
 		Message: "internal server error",
-		Details: details,
 	}
 }
 

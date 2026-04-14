@@ -1,4 +1,4 @@
-package errors
+package apperrors
 
 import "github.com/gin-gonic/gin"
 
