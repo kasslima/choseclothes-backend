@@ -7,11 +7,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type UserHandler struct{}
+type UserHandler struct {
+	service Service
+}
 
-var users []User
+func NewUserHandler(service Service) *UserHandler {
+	return &UserHandler{
+		service: service,
+	}
+}
 
 func (h *UserHandler) GetUsers(c *gin.Context) {
+	users := h.service.GetUsers()
 	response.OK(c, users)
 }
 
@@ -36,7 +43,16 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 		return
 	}
 
-	users = append(users, user)
+	createdUser, err := h.service.CreateUser(user)
+	if err != nil {
+		if appErr, ok := err.(errors.AppError); ok {
+			errors.Respond(c, appErr)
+			return
+		}
 
-	response.Created(c, user)
+		errors.Respond(c, errors.NewInternal(err.Error()))
+		return
+	}
+
+	response.Created(c, createdUser)
 }

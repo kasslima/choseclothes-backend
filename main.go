@@ -1,14 +1,8 @@
 package main
 
-import (
-	"choseclothes/internal/http"
-	"choseclothes/internal/user"
-)
+import "choseclothes/internal/app"
 
 func main() {
-	userHandler := &user.UserHandler{}
-
-	r := http.SetupRouter(userHandler)
-
+	r := app.BuildRouter()
 	r.Run()
 }
